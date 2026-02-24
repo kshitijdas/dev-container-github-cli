@@ -3,9 +3,12 @@ set -e
 
 echo "=== Setting up development environment ==="
 
+# Get workspace root directory
+WORKSPACE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
 # Private-only sources (must be provided by environment)
 PRIVATE_APT_GITHUB_CLI_REPO="${PRIVATE_APT_GITHUB_CLI_REPO:-}"
-PRIVATE_NPM_REGISTRY="${PRIVATE_NPM_REGISTRY:-${NPM_CONFIG_REGISTRY:-}}"
+PRIVATE_NPM_REGISTRY="${PRIVATE_NPM_REGISTRY:-${NPM_CONFIG_REGISTRY:-}"
 
 fail_private_only() {
     echo "✗ $1"
@@ -13,9 +16,9 @@ fail_private_only() {
 }
 
 # Copy pip.conf for private PyPI access
-if [ -f "/workspaces/copilot_cli2/etc/pip.conf" ]; then
+if [ -f "${WORKSPACE_ROOT}/etc/pip.conf" ]; then
     mkdir -p ~/.config/pip
-    cp /workspaces/copilot_cli2/etc/pip.conf ~/.config/pip/pip.conf
+    cp "${WORKSPACE_ROOT}/etc/pip.conf" ~/.config/pip/pip.conf
     echo "✓ pip.conf configured"
 fi
 
@@ -51,11 +54,11 @@ if ! command -v github-copilot-cli &> /dev/null; then
 fi
 
 # Install Python requirements if they exist
-if [ -f "/workspaces/copilot_cli2/requirements.txt" ]; then
+if [ -f "${WORKSPACE_ROOT}/requirements.txt" ]; then
     if [ ! -f "$HOME/.config/pip/pip.conf" ]; then
         fail_private_only "pip.conf is required for private-only Python installs"
     fi
-    pip install -r /workspaces/copilot_cli2/requirements.txt
+    pip install -r "${WORKSPACE_ROOT}/requirements.txt"
     echo "✓ Python requirements installed"
 fi
 
