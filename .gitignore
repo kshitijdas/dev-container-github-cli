@@ -1,0 +1,16 @@
+# Credentials and secrets
+etc/.npmrc
+etc/pip.conf
+
+# IDE
+.vscode/
+.idea/
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+npm-debug.log*

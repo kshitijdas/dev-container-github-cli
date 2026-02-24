@@ -1,4 +1,5 @@
 #!/bin/bash
+'''
 set -e
 
 echo "=== Setting up development environment ==="
@@ -63,3 +64,5 @@ if [ -f "${WORKSPACE_ROOT}/requirements.txt" ]; then
 fi
 
 echo "=== Container ready! ==="
+
+'''
