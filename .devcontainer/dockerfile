@@ -1,0 +1,54 @@
+# Start from a Python-friendly base (Debian/Ubuntu)
+#FROM mcr.microsoft.com/devcontainers/python:3.12
+FROM dockerhub.artifactory.riotinto.com/python:3.12
+ 
+# Copy your intermediate certificate into the conventional location
+# /usr/local/share/ca-certificates expects *.crt files (PEM)
+COPY .devcontainer/RTNetworkSecurityTrust.crt /usr/local/share/ca-certificates/RTNetworkSecurityTrust.crt
+COPY .devcontainer/zia.corp.riotinto.org.crt /usr/local/share/ca-certificates/zia.corp.riotinto.org.crt
+ 
+ 
+# Add to OS trust store
+# - update-ca-certificates will hash and append to /etc/ssl/certs/ca-certificates.crt
+# - This makes OpenSSL, curl, git, and most system libraries trust your intermediate
+# RUN apt-get update \
+#     && apt-get install -y --no-install-recommends ca-certificates \
+#     && update-ca-certificates \
+#     && rm -rf /var/lib/apt/lists/*
+ 
+# Remove broken Yarn repo (fix GPG key issue)
+RUN rm -f /etc/apt/sources.list.d/yarn.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates \
+    && update-ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+ 
+# Ensure Python/certifi-based stacks see the updated bundle.
+# Many Python libs (requests, pip) rely on certifi's bundle; we point them to the OS bundle.
+ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+ 
+# (Optional) If you must use certifi's own bundle and append your cert:
+# RUN python - <<'PY'
+# import certifi, shutil
+# src = "/usr/local/share/ca-certificates/intermediate-ca.crt"
+# dst = certifi.where()
+# with open(src, "rb") as s, open(dst, "ab") as d: d.write(b"\n" + s.read() + b"\n")
+# PY
+ 
+# Install Node.js (LTS) via NodeSource for up-to-date npm support
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
+    && rm -rf /var/lib/apt/lists/*
+ 
+# Configure npm to use artifactory registry and install copilot CLI
+RUN npm config set registry https://artifactory.riotinto.com/artifactory/api/npm/riotinto-npm/ \
+    && npm install -g @github/copilot
+ 
+# Basic sanity tools
+#RUN apt-get update && apt-get install -y --no-install-recommends git curl openssl && rm -rf /var/lib/apt/lists/*
+RUN rm -f /etc/apt/sources.list.d/yarn.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends git curl openssl \
+    && rm -rf /var/lib/apt/lists/*
+ 

@@ -1,0 +1,52 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
+{
+    "name": "Python 3",
+    // Using artifactory for base image and features
+    "image": "riotinto-docker.artifactory.riotinto.com/ist/tech-platforms/tech-enablement/devex/devcontainer/python",
+    "features": {
+        "ghcr.artifactory.riotinto.com/devcontainers/features/copilot-cli:1": {},
+        "ghcr.artifactory.riotinto.com/devcontainers/features/github-cli:1": {},
+        "ghcr.artifactory.riotinto.com/devcontainers/features/node:1": {
+            "version": "lts"
+        }
+    },
+   
+    // Fallback Dockerfile-based build (commented out - using artifactory image instead)
+    // "build": {
+    //     "dockerfile": "dockerfile",
+    //     "context": ".."
+    // },
+ 
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [],
+ 
+    // Use 'postCreateCommand' to run commands after the container is created.
+    "postCreateCommand": "bash .devcontainer/post-create.sh",
+    
+    // Environment variables for artifactory and certificate configuration
+    "containerEnv": {
+        "NPM_CONFIG_REGISTRY": "https://artifactory.riotinto.com/artifactory/api/npm/riotinto-npm/",
+        "SSL_CERT_FILE": "/etc/ssl/certs/ca-certificates.crt",
+        "REQUESTS_CA_BUNDLE": "/etc/ssl/certs/ca-certificates.crt"
+    },
+    // "customizations": {
+    //  "vscode": {
+    //      "extensions": [
+    //          "MermaidChart.vscode-mermaid-chart",
+    //          "dbaeumer.vscode-eslint",
+    //          "esbenp.prettier-vscode"
+    //      ],
+    //      "settings": {
+    //          "typescript.tsdk": "node_modules/typescript/lib"
+    //      }
+    //  }
+    // }
+ 
+    // Configure tool-specific properties.
+    // "customizations": {},
+ 
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    // "remoteUser": "root"
+}
+ 
