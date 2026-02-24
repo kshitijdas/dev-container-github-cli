@@ -10,7 +10,7 @@
         "ghcr.artifactory.riotinto.com/devcontainers/features/node:1": {
             "version": "lts"
         }
-    },
+    }
    
     // Fallback Dockerfile-based build (commented out - using artifactory image instead)
     // "build": {
@@ -22,14 +22,14 @@
     // "forwardPorts": [],
  
     // Use 'postCreateCommand' to run commands after the container is created.
-    "postCreateCommand": "bash .devcontainer/post-create.sh",
+    //"postCreateCommand": "bash .devcontainer/post-create.sh",
     
     // Environment variables for artifactory and certificate configuration
-    "containerEnv": {
-        "NPM_CONFIG_REGISTRY": "https://artifactory.riotinto.com/artifactory/api/npm/riotinto-npm/",
-        "SSL_CERT_FILE": "/etc/ssl/certs/ca-certificates.crt",
-        "REQUESTS_CA_BUNDLE": "/etc/ssl/certs/ca-certificates.crt"
-    },
+    //"containerEnv": {
+    //    "NPM_CONFIG_REGISTRY": "https://artifactory.riotinto.com/artifactory/api/npm/riotinto-npm/",
+    //    "SSL_CERT_FILE": "/etc/ssl/certs/ca-certificates.crt",
+    //    "REQUESTS_CA_BUNDLE": "/etc/ssl/certs/ca-certificates.crt"
+    //},
     // "customizations": {
     //  "vscode": {
     //      "extensions": [
